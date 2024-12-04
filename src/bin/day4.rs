@@ -97,8 +97,8 @@ fn is_x_mas(vec: &Vec<Vec<char>>, x_coord: &XCoords, direction: &(i32, i32)) -> 
 }
 
 // part 2 function
-// we're gonna check for the upper row first and check if is MS or SM
-// if OK then check lower row and look for the inverse SM or MS 
+// we're gonna check in diagonals, if both diagonals meets criteria
+// then return true.
 fn is_xmas(vec: &Vec<Vec<char>>, a_coords: &ACoords) -> bool {
 
     let mut valid_diagonals = 0;
