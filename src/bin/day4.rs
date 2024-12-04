@@ -77,7 +77,7 @@ fn is_x_mas(vec: &Vec<Vec<char>>, x_coord: &XCoords, direction: &(i32, i32)) -> 
     // if check passed, then check if the str in the direction match 'MAS'
     let str_to_match = "MAS";
 
-    let mut string_found = String::with_capacity(4);
+    let mut string_found = String::with_capacity(3);
 
     for (i, char_) in str_to_match.chars().enumerate() {
         if let Some(row) = vec.get((y as  i32 + (direction.1 * (i as i32 + 1))) as usize) {
@@ -113,18 +113,15 @@ fn is_xmas(vec: &Vec<Vec<char>>, a_coords: &ACoords) -> bool {
 
     for diagonal in [diagonal_1, diagonal_2] {
 
-        let mut string_found: String = String::with_capacity(4);
+        let mut string_found: String = String::with_capacity(2);
 
         for coord_pair in diagonal {
             if let Some(row) = vec.get((a_coords.y as i32 + coord_pair.1) as usize) {
                 if let Some(char_) = row.get((a_coords.x as i32 + coord_pair.0) as usize) {
                     match *char_ {
-                        c if c == 'S' => {
+                        c if c == 'S' || c == 'M' => {
                             string_found.push(c)
                             
-                        },
-                        c if c == 'M'  => {
-                                string_found.push(c);
                         },
                         _ => {return false}
                     }
