@@ -282,10 +282,6 @@ fn main() {
 
 
     // PART 2: I will iterate over all posible places to put an obstruction (.)
-    // store in the hashmap - or | or + to note the direction of an already visted place
-    // if I encounter an already visited place with the same symbol or a + means that i'm on a loop
-    // so we add 1 to the counter and go to the next possible place.
-    // Otherwise if i get out the map, go to the next possible place.
 
     let mut possible_obstructions = 0;
 
