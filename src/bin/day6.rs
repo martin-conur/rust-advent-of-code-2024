@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 use rust_advent_of_code_2024::utils::read_lines;
+use rayon::prelude::*;
+use std::sync::atomic::{AtomicI32, Ordering};
+
 
 #[derive(Debug, Clone, PartialEq)]
 enum LookingDirection {
@@ -282,11 +285,12 @@ fn main() {
 
 
     // PART 2: I will iterate over all posible places to put an obstruction (.)
+    // that means using the part 1 path X
 
-    let mut possible_obstructions = 0;
+    let possible_obstructions = AtomicI32::new(0);
 
-    for (k, v) in map.map.iter() {
-        if v != &'#'&& v!= &'X' {
+    map_part1.map.par_iter().for_each( |(k, v)| {
+        if v == &'X' {
     
             // create a new map with a obstruction in this position
             let mut map_part2 = map.clone();
@@ -302,15 +306,14 @@ fn main() {
                 guard_part2.advance_with_obstruction(&mut map_part2, &mut map_directions);
 
                 if guard_part2.loop_mode {
-                    possible_obstructions += 1;
-                    println!("{possible_obstructions}");
+                    possible_obstructions.fetch_add(1, Ordering::SeqCst);
                     break
                 }
             }
 
         }
-    }
-    println!("score part 2: {possible_obstructions}");
+    });
+    println!("score part 2: {:?}", possible_obstructions);
 
 
 }
