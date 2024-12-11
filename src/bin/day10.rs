@@ -37,25 +37,36 @@ fn main() {
     };
 
     let mut part1_score = 0;
+    let mut part2_score = 0;
 
     let directions = [(0, 1), (1, 0), (0, -1), (-1, 0)];
-
+    // PART 1
     for row in 0..grid.get_width() {
         for col in 0..grid.get_height() {
             if grid.grid[row][col] == 0 {
-                part1_score += bfs(&grid, row, col, directions);
+                part1_score += bfs(&grid, row, col, directions, false);
+            }
+        }
+    }
+
+    // PART 2
+    for row in 0..grid.get_width() {
+        for col in 0..grid.get_height() {
+            if grid.grid[row][col] == 0 {
+                part2_score += bfs(&grid, row, col, directions, true);
             }
         }
     }
 
     println!("part1 score: {part1_score}");
+    println!("part2 score: {part2_score}");
 }
 
 fn is_within_bounds(grid: &Grid, row: i32, col: i32) -> bool {
     return row >= 0 && row < grid.get_width() as i32 && col >= 0 && col < grid.get_height() as i32
 }
 
-fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32); 4]) -> i32 {
+fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32); 4], restep: bool) -> i32 {
     let mut queue = VecDeque::new();
     let mut visited = HashSet::new();
     let mut score = 0;
@@ -70,8 +81,8 @@ fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32);
             let neighbor_col = current_col as i32 + neighbor_col;
 
             if is_within_bounds(&grid, neighbor_row, neighbor_col) && 
-                !visited.contains(&(neighbor_row as usize, neighbor_col as usize)) &&
-                grid.grid[neighbor_row as usize][neighbor_col as usize] == current_height + 1 {
+                grid.grid[neighbor_row as usize][neighbor_col as usize] == current_height + 1 &&
+                restep {
                 
                 visited.insert((neighbor_row as usize, neighbor_col as usize));
                 queue.push_front((neighbor_row as usize, neighbor_col as usize, current_height + 1));
@@ -79,7 +90,19 @@ fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32);
                 if grid.grid[neighbor_row as usize][neighbor_col as usize] == 9 {
                     score += 1;
                 }
+            } else if is_within_bounds(&grid, neighbor_row, neighbor_col) && 
+            !visited.contains(&(neighbor_row as usize, neighbor_col as usize)) &&
+            grid.grid[neighbor_row as usize][neighbor_col as usize] == current_height + 1 &&
+            !restep {
+            
+            visited.insert((neighbor_row as usize, neighbor_col as usize));
+            queue.push_front((neighbor_row as usize, neighbor_col as usize, current_height + 1));
+
+            if grid.grid[neighbor_row as usize][neighbor_col as usize] == 9 {
+                score += 1;
+                }
             }
+
         }
     }
     score
