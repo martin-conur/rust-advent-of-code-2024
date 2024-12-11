@@ -1,5 +1,5 @@
 # rust-advent-of-code-2024
-🚧 currently in day 4.
+🚧 currently in day 11.
 
 ## Rust solutions to the Advent of Code 2024! 
 Solutions may not be optimal, I just want to be more fluid on this amazing language!

@@ -27,4 +27,5 @@ Cargo.lock
 # inputs 
 /inputs/*
 
+.DS_Store/
 .DS_Store

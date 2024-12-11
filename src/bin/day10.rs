@@ -66,6 +66,42 @@ fn is_within_bounds(grid: &Grid, row: i32, col: i32) -> bool {
     return row >= 0 && row < grid.get_width() as i32 && col >= 0 && col < grid.get_height() as i32
 }
 
+/// Performs Breadth-first search on the given directions
+/// 
+/// # Arguments
+/// 
+/// * `grid` - Grid struct with the grid vector.
+/// * `start_row` - row index of the starting point.
+/// * `start_col`- col index of the starting point.
+/// * `directions` - Array with the directions to explore.
+/// * `restep` - If true, you can re-visit a node from another path, otherwise, just visited once.
+/// 
+/// # Returns
+/// 
+/// The path numbers to target 
+/// 
+/// # Example
+/// 
+/// ```
+/// let grid_vec: Vec<Vec<i32>> = vec![
+///     vec![8, 9, 0, 1, 0, 1, 2, 3],
+///     vec![7, 8, 1, 2, 1, 8, 7, 4],
+///     vec![8, 7, 4, 3, 0, 9, 6, 5],
+///     vec![9, 6, 5, 4, 9, 8, 7, 4],
+///     vec![4, 5, 6, 7, 8, 9, 0, 3],
+///     vec![3, 2, 0, 1, 9, 0, 1, 2],
+///     vec![0, 1, 3, 2, 9, 8, 0, 1],
+///     vec![1, 0, 4, 5, 6, 7, 3, 2],
+///     ];
+/// 
+/// let grid = Grid {
+///     grid: grid_vec
+/// };
+/// 
+/// let directions = let directions = [(0, 1), (1, 0), (0, -1), (-1, 0)];
+/// let result = bfs(&grid, 0, 2, &directions, false);
+/// assert_eq!(result, 5);
+/// ```
 fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32); 4], restep: bool) -> i32 {
     let mut queue = VecDeque::new();
     let mut visited = HashSet::new();
@@ -107,3 +143,5 @@ fn bfs(grid: &Grid, start_row: usize, start_col: usize, directions: [(i32, i32);
     }
     score
 }
+
+
