@@ -1,15 +1,20 @@
+use std::collections::HashMap;
 use num::Integer;
+use rayon::prelude::*;
 use rust_advent_of_code_2024::utils::read_line_as_vec;
 
 fn main() {
     let input_vector: Vec<i32> = read_line_as_vec("inputs/day11.txt");
 
-    let mut stone_wall: Vec<i64> = input_vector.iter().map(|v| *v as i64).collect();
-    for _ in  0..75 {
-        stone_wall = blink(&stone_wall);
-    }
+    let result: i64 = input_vector
+        .par_iter()
+        .map(|&v| {
+            let mut local_cache = HashMap::new(); // Each thread gets its own cache
+            blink(v as i64, 0, 75, &mut local_cache)
+        })
+        .sum();
 
-    println!("{:?}", stone_wall.len());
+    println!("{result}");
 }
 
 fn is_length_even(number: &i64) -> bool {
@@ -23,26 +28,34 @@ fn split_even_length(number: &i64) -> (i64, i64) {
 
     let left = number / divisor;
     let right = number % divisor;
-    (left,right)
+    (left, right)
 }
 
-fn blink(original_vec: &Vec<i64>) -> Vec<i64> {
-    let mut new_stones: Vec<i64> = vec![];
-
-    for value in original_vec {
-        match value {
-            0 => {
-                new_stones.push(1)
-            },
-            num if is_length_even(&num) => {
-                let (left, right) = split_even_length(&num);
-                new_stones.push(left);
-                new_stones.push(right);
-
-            },
-            _ => new_stones.push(value * 2024)
-        };
+fn blink(
+    stone_number: i64,
+    blinks: u32,
+    stop_at: u32,
+    cache: &mut HashMap<(i64, u32), i64>,
+) -> i64 {
+    if blinks >= stop_at {
+        return 1;
     }
 
-    new_stones
+    if let Some(&cached_result) = cache.get(&(stone_number, blinks)) {
+        return cached_result;
+    }
+
+    let result = match stone_number {
+        0 => blink(1, blinks + 1, stop_at, cache),
+        num if is_length_even(&num) => {
+            let (left, right) = split_even_length(&num);
+            blink(left, blinks + 1, stop_at, cache)
+                + blink(right, blinks + 1, stop_at, cache)
+        }
+        _ => blink(stone_number * 2024, blinks + 1, stop_at, cache),
+    };
+
+    cache.insert((stone_number, blinks), result);
+
+    result
 }
