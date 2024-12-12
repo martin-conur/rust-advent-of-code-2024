@@ -12,6 +12,20 @@ where
     Ok(io::BufReader::new(file).lines())
 }
 
+/// Transforms space separated numbers into a vector.
+pub fn read_line_as_vec<P>(filename: P) -> Vec<i32> 
+    where
+        P: AsRef<Path>
+{
+    let mut result_vec = vec![];
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines.flatten() {
+            result_vec =  line.split_whitespace().map(|v| v.parse::<i32>().unwrap()).collect()
+        }
+    }
+
+    result_vec
+}
 
 pub fn topological_sort<'a>(pairs: &Vec<(i32, i32)>) -> Result<Vec<i32>, &'a str> {
     let mut graph: HashMap<i32, Vec<i32>> = HashMap::new();
