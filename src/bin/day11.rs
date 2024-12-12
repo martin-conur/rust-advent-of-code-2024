@@ -21,8 +21,13 @@ fn is_length_even(number: &i64) -> bool {
     (((*number as f64).log10() as usize) + 1).is_even()
 }
 
+
 fn split_even_length(number: &i64) -> (i64, i64) {
-    let total_digits = ((*number as f64).log10() as usize) + 1;
+    let total_digits = match number {
+        0..9 => 1,
+        _ =>((*number as f64).log10() as usize) + 1
+    };
+
     let right_digits = total_digits / 2;
     let divisor = 10_i32.pow(right_digits as u32) as i64;
 
