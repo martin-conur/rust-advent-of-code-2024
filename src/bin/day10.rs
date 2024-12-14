@@ -98,7 +98,7 @@ fn is_within_bounds(grid: &Grid, row: i32, col: i32) -> bool {
 ///     grid: grid_vec
 /// };
 /// 
-/// let directions = let directions = [(0, 1), (1, 0), (0, -1), (-1, 0)];
+/// let directions = [(0, 1), (1, 0), (0, -1), (-1, 0)];
 /// let result = bfs(&grid, 0, 2, &directions, false);
 /// assert_eq!(result, 5);
 /// ```

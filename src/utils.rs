@@ -27,6 +27,21 @@ pub fn read_line_as_vec<P>(filename: P) -> Vec<i32>
     result_vec
 }
 
+// read plain text as char grid
+pub fn read_lines_as_str_grid<P>(filename: P) -> Vec<Vec<char>> 
+    where
+    P: AsRef<Path>
+{
+    let mut grid: Vec<Vec<char>> = vec![];
+
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines.flatten() {
+            grid.push(line.chars().collect())
+        }
+    }
+    grid
+}
+
 pub fn topological_sort<'a>(pairs: &Vec<(i32, i32)>) -> Result<Vec<i32>, &'a str> {
     let mut graph: HashMap<i32, Vec<i32>> = HashMap::new();
     let mut in_degree: HashMap<i32, usize> = HashMap::new();
